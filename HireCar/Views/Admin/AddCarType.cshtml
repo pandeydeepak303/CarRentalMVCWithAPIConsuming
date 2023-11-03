@@ -1,0 +1,289 @@
+﻿
+@{
+    ViewBag.Title = "AddCarType";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<div class="MainDivForm">
+    <div class="container mt-4" id="mainDiv">
+        <div style=" color: white; text-align: center; font-size: xx-large;"><b>Add CarType</b></div>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <form id="carForm">
+                    <div class="mb-3">
+                        <input type="hidden" name="Type_Id" id="Type_Id" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="Name" class="form-label">Name:</label>
+                        <input type="text" name="Name" id="Name" class="form-control" placeholder="Enter Car Name" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="Model" class="form-label">Model:</label>
+                        <input type="text" name="Model" id="Model" class="form-control" placeholder="Enter Car Model" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="YearOfModel" class="form-label">Year of Model:</label>
+                        <input type="text" name="YearOfModel" id="YearOfModel" class="form-control" placeholder="Enter Car Year" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="Capacity" class="form-label">Capacity:</label>
+                        <input type="text" name="Capacity" id="Capacity" class="form-control" placeholder="Enter Capicity" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="CarImage" class="form-label">Car Image:</label>
+                        <input type="file" name="CarImage" id="CarImage" class="form-control" accept="image/*" />
+                    </div>
+
+                    <div class="mb-3">
+                        <img id="previewImage" src="#" alt="Car Image" style="display: none; max-width: 100%; height: auto;" />
+                    </div>
+                    <button type="button" class="btn btn-primary" id="btnSubmit" onclick="">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container mt-4">
+    <div class="text-center">
+        <table id="carTable" class="table table-bordered table-striped table-hover">
+            <thead class="table-primary">
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Model</th>
+                    <th>Year of Model</th>
+                    <th>Capacity</th>
+                    <th>CarImage</th>
+                    <th>ActionLink</th>
+                </tr>
+            </thead>
+            <tbody id="Theaddata"></tbody>
+        </table>
+    </div>
+</div>
+    <style>
+
+        body {
+            background-color: #f0f0f0;
+            /* background-image: url('../../AdminContent/assets/img/pexels-photo-1707820.jpeg');*/
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        .form-label {
+            color: white;
+        }
+
+        .btn-register {
+            background-color: #007bff;
+            border-color: #007bff;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 12px 20px;
+            width: 100%;
+            text-align: center;
+        }
+
+            .btn-register:hover {
+                background-color: #0056b3;
+                border-color: #0056b3;
+            }
+
+        #carTable {
+            width: 80%;
+            margin-left: 177px;
+            margin-top: 27px;
+        }
+
+        #mainDiv {
+        }
+
+
+        .MainDivForm {
+            background-color: black;
+            width: 70%;
+            margin-left: 200px;
+            box-shadow: 5px 15px 10px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        }
+
+        #btnSubmit {
+            margin-left: 82px;
+            width: 161px;
+            margin-top: 3px;
+            margin-bottom: 22px;
+        }
+
+
+        .container {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .table {
+            width: 100%;
+        }
+    </style>
+
+    @*<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>*@
+    <script>
+
+        $(document).ready(function () {
+            fetchCarData();
+        });
+
+        function fetchCarData() {
+            var apiBaseUrl = 'https://localhost:44347/';
+            $.ajax({
+                url: apiBaseUrl + "GetAllCarDetailsType",
+                type: 'GET',
+                dataType: 'json',
+                success: function (response) {
+                    if (response.statusCode == 200) {
+
+                        populateTable(response.data);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error fetching car data: ' + error);
+                }
+            });
+        }
+
+        function populateTable(carData) {
+            var tableBody = $('#Theaddata');
+            tableBody.empty();
+            carData.forEach(function (car) {
+                var row = '<tr>' +  
+                    '<td>' + car.Type_Id + '</td>' +
+                    '<td>' + car.Name + '</td>' +
+                    '<td>' + car.Model + '</td>' +
+                    '<td>' + car.YearOfModel + '</td>' +
+                    '<td>' + car.Capacity + '</td>' +
+                    '<td><img src="' + car.CarImage + '" alt="Car Image" style="max-width: 80px;" /></td>' +
+                    '<td><button class="btn btn-info" onclick="EditForm(' + car.Type_Id + ')">Edit</button>' +
+                    '<button class="btn btn-danger" onclick="Delete(' + car.Type_Id + ')">Delete</button></td>' +
+                    '</tr>';
+                tableBody.append(row);
+            });
+        }
+
+        $("#btnSubmit").click(function () {
+            var carData = {
+                Type_Id: $("#Type_Id").val(),
+                Name: $("#Name").val(),
+                Model: $("#Model").val(),
+                YearOfModel: $("#YearOfModel").val(),
+                Capacity: $("#Capacity").val(),
+                CarImage: $("#CarImage").val(),
+                IsDeleted: false
+
+            };
+
+            $.ajax({
+                url: "https://localhost:44347/AddEditCarDetailsType",
+                type: "POST",
+                data: JSON.stringify(carData),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    if (response.statusCode == 200) {
+                        cleardata();
+                        fetchCarData();
+                        if (carData.Type_Id > 0) {
+                            cleardata();
+                            alert("Updated successfully");     
+                        }
+                        else {
+                            alert("Inserted successfully");
+                        }
+                    } else {
+                        alert("Something went wrong");
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+
+                }
+            });
+        });
+
+        function cleardata() {
+            $("#Name").val("");
+            $("#Model").val("");
+            $("#YearOfModel").val("");
+            $("#Capacity").val("");
+            $("#CarImage").val("");
+        }
+
+
+        function EditForm(Type_Id) {
+            Type_Id = Type_Id || $("#Type_Id").val();
+            $.ajax({
+                url: 'https://localhost:44347/GetAllCarDetailsType?Type_Id=' + Type_Id,
+                type: "Get",
+                dataType: "json",
+                success: function (data) {
+                    $("#Type_Id").val(data.data[0].Type_Id);
+                    $("#Name").val(data.data[0].Name).focus();
+                    $("#Model").val(data.data[0].Model);
+                    $("#YearOfModel").val(data.data[0].YearOfModel);
+                    $("#Capacity").val(data.data[0].Capacity);
+                    $("#CarImage").val(data.data[0].CarImage);
+
+                },
+                error: function (error) {
+                    console.error(" Error fatching data :", error);
+                }
+            })
+        }
+
+        function Delete(Type_Id) {
+
+            $.ajax({
+                url: 'https://localhost:44347/DeletecarType?id=' + Type_Id,
+                type: "DELETE",
+                dataType: "json",
+                success: function (response) {
+                    if (response.statusCode == 200) {
+                        fetchCarData();
+                        alert("Data deleted successfully");
+                    }
+                    else {
+                        alert("Record doesn't exists ");
+                      }
+                },
+                error: function (error) {
+                    console.error("Error fetching data:", error);
+                }
+            });
+        }
+
+                function confirmDelete(carTypeId) {
+                
+                    var confirmation = confirm("Are you sure you want to delete?");
+
+                    if (confirmation) {
+                      
+                        Delete(carTypeId);
+                    }
+                }
+     
+
+    </script>
+
+
+
+
+
+
+
+
+

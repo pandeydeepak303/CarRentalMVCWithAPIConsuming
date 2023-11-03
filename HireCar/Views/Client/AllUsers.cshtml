@@ -1,0 +1,63 @@
+﻿@model IEnumerable<HireCar.Models.UserVm>
+
+@{
+    ViewBag.Title = "AllUsers";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cvJFadzukiJbZRUVgK6Iy1E0A5Q6M" crossorigin="anonymous">
+<link href="@Url.Content("~/Content/site.css")" rel="stylesheet" />
+<div class="card mb-4">
+    <div class="card-header">
+        <i class="fas fa-table me-1"></i>
+        <b>Userlist</b>
+    </div>
+   <div class="card-body">
+    <table id="datatablesSimple">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.Name)</th>
+                <th>@Html.DisplayNameFor(model => model.Gender)</th>
+                <th>@Html.DisplayNameFor(model => model.ContectNumber)</th>
+                <th>@Html.DisplayNameFor(model => model.Address)</th>
+                <th>@Html.DisplayNameFor(model => model.Email)</th>
+                <th>@Html.DisplayNameFor(model => model.UserType)</th>
+                <th>ActionLink</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                <td>@Html.DisplayFor(modelItem => item.Gender)</td>
+                <td>@Html.DisplayFor(modelItem => item.ContectNumber)</td>
+                <td>@Html.DisplayFor(modelItem => item.Address)</td>
+                <td>@Html.DisplayFor(modelItem => item.Email)</td>
+                <td>@Html.DisplayFor(modelItem => item.UserType)</td>
+
+                <td>
+                    <div style="display: flex;">
+                        <a href="~/Admin/Edit/@item.Id" class="btn btn-info">Edit</a>
+                        <a href="~/Admin/View/@item.Id" class="btn btn-primary">View</a>
+                        <a href="~/Admin/Delete/@item.Id" class="btn btn-danger"
+                            onclick="return confirm('Are you sure you want to delete your data?')">Delete</a>
+                    </div>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,171 @@
+﻿@model HireCar.Models.UserVm
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-dist/js/bootstrap.bundle.min.js"></script>
+
+@using (Html.BeginForm("Edit", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="container" id="MainDiv">
+
+            <h2 style="text-align: center; color: chartreuse; margin-top: 23px; ">Edit user</h2>
+            <hr />
+            <div class="form-group">
+                @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-12">
+                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Gender, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-12">
+                    @Html.EditorFor(model => model.Gender, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Gender, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.ContectNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-12">
+                    @Html.EditorFor(model => model.ContectNumber, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.ContectNumber, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-12">
+                    @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-12">
+                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            @*<div class="form-group">
+                    @Html.LabelFor(model => model.DateOfBirth, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.DateOfBirth, new { htmlAttributes = new { @class = "form-control", type = "DateOfBirth" } })
+                        @Html.ValidationMessageFor(model => model.DateOfBirth, "", new { @class = "text-danger" })
+                    </div>
+                </div>*@
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.DateOfBirth, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-12">
+                    @Html.EditorFor(model => model.DateOfBirth, new { htmlAttributes = new { @class = "form-control", type = "DateOfBirth", id = "datepicker" } })
+                    @Html.ValidationMessageFor(model => model.DateOfBirth, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+
+
+
+
+            <div class="form-group">
+                <div class="col-md-12">
+                    <label class="form-label" for="UserType">User Type</label>
+                    @Html.DropDownListFor(m => m.UserType, new List<SelectListItem>
+                    {
+                        new SelectListItem { Text = "Admin", Value = "Admin" },
+                        new SelectListItem { Text = "Owner", Value = "Owner" },
+                        new SelectListItem { Text = "Client", Value = "Client" }
+                    }, "Select User Type", new { @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.ProfileImage, new { @class = "control-label" })
+
+                <div class="form-group">
+                    @Html.TextBox("profileImg", "", new { type = "file" })
+                </div>
+                <div>
+                    <img src="@Url.Content(Model.ProfileImage)" alt="Image" style="height:40px;" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div style=" text-align: center; ">
+                    <input class="btn btn-outline-primary" style=" height: 52px; width: 179px; margin-top: 9px; margin-bottom: 21px;" type="submit" value="Save" />
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+
+<style>
+
+    body {
+        background-color: #f0f0f0;
+        background-image: url('../../AdminContent/assets/img/pexels-erik-mclean-4062360.jpg');
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: unset;
+        margin: 0;
+        padding: 0;
+    }
+
+    .form-wrapper {
+        background-image: url('../../AdminContent/assets/img/pexels-photo-1707820.jpeg');
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+    #MainDiv {
+        background-color: initial;
+        width: 55%;
+        height: 55%;
+        box-shadow: 5px 15px 10px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        margin-top: -9px;
+        color: white;
+    }
+
+    .form-control {
+        background-color: chocolate;
+        color: white;
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+
+        $("#datepicker").datepicker({
+            dateFormat: "yy-mm-dd",
+            changeYear: true,
+            changeMonth: true,
+            yearRange: "1900:2030"
+        });
+    });
+</script>

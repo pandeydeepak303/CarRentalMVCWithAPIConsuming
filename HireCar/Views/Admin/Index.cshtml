@@ -1,0 +1,121 @@
+﻿@model HireCar.Models.CommanVM
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<link href="~/Content/Site.css" rel="stylesheet" />
+@if (!string.IsNullOrEmpty(ViewBag.SuccessMessage))
+{
+    <div id="successMessage" class="alert alert-success">
+        @ViewBag.SuccessMessage
+    </div>
+}
+
+<div class="row">
+    <div class="col-xl-3 col-md-6">
+        <div class="card bg-primary text-white mb-4">
+            <div class="card-body"> TotalOwnerRegister</div>
+            <div class="card-footer d-flex align-items-center justify-content-between">
+                @ViewBag.TotalOwnerRegister
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6">
+        <div class="card bg-opacity-25 text-white mb-4">
+            <div class="card-body"> TotalCar</div>
+            <div class="card-footer d-flex align-items-center justify-content-between">
+                @ViewBag.totalCar
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6">
+        <div class="card bg-green text-white mb-4">
+            <div class="card-body">TotalClient</div>
+            <div class="card-footer d-flex align-items-center justify-content-between">
+                @ViewBag.TotalClientRegister
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6">
+        <div class="card bg-danger text-white mb-4">
+            <div class="card-body">TotalRide</div>
+            <div class="card-footer d-flex align-items-center justify-content-between">
+                @ViewBag.totalRide
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <i class="fas fa-table me-1"></i>
+        <b>OwnerList</b>
+    </div>
+    <div class="card-body">
+        <table id="datatablesSimple">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Contact</th>
+                    <th>Email</th>
+                    <th>ActionLink</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.data.Where(x => x.UserType == "Owner"))
+                {
+                       <tr>
+                        <td>@item.Name</td>
+                        <td>@item.ContectNumber</td>
+                        <td>@item.Email</td>
+
+                        <td>
+                            <a href="~/Admin/Edit/@item.id" class="btn btn-success">Edit</a>
+                            <a href="~/Admin/View/@item.id" class="btn btn-primary">View</a>        
+                            <a href="~/Admin/Delete/@item.id" class="btn btn-danger" 
+                            onclick="return confirm('Are you sure you want to delete your data?')">Delete</a>
+
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<style>
+
+    .bg-green {
+        background-color: #00FF00;
+    }
+
+    .bg-opacity-25 {
+        background-color: brown;
+    }
+</style>
+
+@if (!string.IsNullOrEmpty(ViewBag.SuccessMessage))
+{
+    <script>
+        
+        function hideSuccessMessage() {
+            var successMessage = document.getElementById('successMessage');
+            if (successMessage) {
+                setTimeout(function () {
+                    successMessage.style.display = 'none';
+                }, 5000); 
+            }
+        }
+        hideSuccessMessage();
+    </script>
+}
+
+
+

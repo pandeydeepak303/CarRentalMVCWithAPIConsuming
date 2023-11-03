@@ -1,0 +1,228 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_CarOwnerLayout.cshtml";
+}
+
+@*<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">*@
+
+<h1 id="OwnerId">@Session["Id"]</h1>
+
+<div class="MainDivForm">
+    <div class="container mt-4" id="mainDiv">
+        <div style=" color: white; text-align: center; font-size: xx-large;"><b>Add Car</b></div>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <form id="carForm">
+                    <div class="mb-3">
+                        <input type="hidden" name="Type_Id" id="Type_Id" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="Name" class="form-label">Name:</label>
+                        <input type="text" name="Name" id="Name" class="form-control" placeholder="Enter Car Name" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="Contact" class="form-label">Contact:</label>
+                        <input type="text" name="Contact" id="Name" class="form-control" placeholder="Enter Contact" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="OwnerId" class="form-label">OwnerId:</label>
+                        <input type="text" name="OwnerId" id="Model" class="form-control" placeholder="Enter OwnerId" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="Model" class="form-label">Model:</label>
+                        <input type="text" name="Model" id="Model" class="form-control" placeholder="Enter Car Model" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="YearOfModel" class="form-label">Year of Model:</label>
+                        <input type="text" name="YearOfModel" id="YearOfModel" class="form-control" placeholder="Enter Car Year" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="Capacity" class="form-label">Capacity:</label>
+                        <input type="text" name="Capacity" id="Capacity" class="form-control" placeholder="Enter Capicity" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="CarImage" class="form-label">Car Image:</label>
+                        <input type="file" name="CarImage" id="CarImage" class="form-control" accept="image/*" />
+                    </div>
+
+                    <div class="mb-3">
+                        <img id="previewImage" src="#" alt="Car Image" style="display: none; max-width: 100%; height: auto;" />
+                    </div>
+                    <button type="button" class="btn btn-primary" id="btnSubmit" onclick="">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-4" style="margin-top: 30px;">
+    <div class="card-header">
+        <i class="fas fa-table me-1"></i>
+        <b>CarList</b>
+    </div>
+    <div class="card-body">
+        <table id="datatablesSimple">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Contact</th>
+                    <th>Email</th>
+                    <th>OwnerId</th>
+                    <th>TotalCar</th>
+                    <th>CarImage</th>
+                    <th>ActionLink</th>
+                </tr>
+            </thead>
+            <tbody id="tablbody">
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+    <style>
+
+        body {
+            background-color: #f0f0f0;
+            background-image: url('../../AdminContent/assets/img/pexels-photo-1707820.jpeg');
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        .form-label {
+            color: white;
+        }
+
+
+        .btn-register {
+            background-color: #007bff;
+            border-color: #007bff;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 12px 20px;
+            width: 100%;
+            text-align: center;
+        }
+
+            .btn-register:hover {
+                background-color: #0056b3;
+                border-color: #0056b3;
+            }
+
+        #carTable {
+            width: 80%;
+            margin-left: 177px;
+            margin-top: 27px;
+        }
+
+        #mainDiv {
+        }
+
+
+        .MainDivForm {
+            background-color: darkslategrey;
+            width: 65%;
+            height: 40%;
+            margin-left: 200px;
+            box-shadow: 5px 15px 10px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        }
+
+        #btnSubmit {
+            margin-left: 82px;
+            width: 161px;
+            margin-top: 3px;
+            margin-bottom: 22px;
+        }
+
+
+        .container {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .table {
+            width: 100%;
+        }
+    </style>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+
+        $(document).ready(function () {
+            console.log("Document is ready.");
+            fetchCarData();
+            
+        });
+        debugger;
+        function fetchCarData() {
+            var OwnerId = $("#OwnerId").text();
+            alert(OwnerId);
+            $.ajax({
+                url: "https://localhost:44347/GetCarDetails?OwnerId=" + OwnerId,
+                type: 'GET',
+                dataType: 'json',
+                success: function (response) {
+                    if (response.statusCode == 200) {
+                       
+                        datarecord = response.data;
+                        debugger;
+                        populateTable(datarecord);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error fetching car data: ' + error);
+                }
+            });
+        }
+
+        function populateTable(datarecord) {
+            debugger;
+            var tableBody = $('#tablbody');
+            tableBody.empty();
+            for (var i = 0; i < datarecord.length; i++) {
+                var row = '<tr>' +
+                    '<td>' + datarecord[i].CarId + '</td>' +
+                    '<td>' + datarecord[i].CarName + '</td>' +
+                    '<td>' + datarecord[i].Contact + '</td>' +
+                    '<td>' + datarecord[i].Contact + '</td>' +
+                    '<td>' + datarecord[i].OwnerId + '</td>' +
+                    '<td>' + datarecord[i].CarImage + '</td>' +
+                    '<td><img src="' + datarecord[i].CarImage + '" alt="Car Image" style="max-width: 80px;" /></td>' +
+                    '<td><button class="btn btn-info" onclick="EditForm(' + datarecord[i].CarId + ')">Edit</button>' +
+                    '<button class="btn btn-danger" onclick="Delete(' + datarecord[i].CarId + ')">Delete</button></td>' +
+                    '</tr>';
+                tableBody.append(row);
+            }
+            //datarecord.forEach(function (car) {
+            //    var row = '<tr>' +
+            //        '<td>' + car.Id + '</td>' +
+            //        '<td>' + car.Name + '</td>' +
+            //        '<td>' + car.Contact + '</td>' +
+            //        '<td>' + car.Email + '</td>' +
+            //        '<td>' + car.OwnerId + '</td>' +
+            //        '<td>' + car.CarImage + '</td>' + 
+            //      '<td><img src="' + car.CarImage + '" alt="Car Image" style="max-width: 80px;" /></td>' +
+            //        '<td><button class="btn btn-info" onclick="EditForm(' + car.Id + ')">Edit</button>' +
+            //        '<button class="btn btn-danger" onclick="Delete(' + car.Id + ')">Delete</button></td>' +
+            //            '</tr>';
+            //    tableBody.append(row);
+            //});
+        }
+
+
+    </script>
+
+
+
+
