@@ -11,7 +11,7 @@ namespace HireCar.Controllers
 {
     public class ClientController : Controller
     {
-        // GET: Client
+        //GET: Client
         public ActionResult Index()
         {
 
